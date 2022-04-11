@@ -11,7 +11,6 @@ export const InputFormBox = styled.div`
 `;
 export const InputItem = styled(Field)`
   display: flex;
-
   margin-bottom: 10px;
   :invalid {
     border: 1px solid #2f4f4f;
