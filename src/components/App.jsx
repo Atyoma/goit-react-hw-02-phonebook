@@ -1,76 +1,123 @@
 import {Component} from 'react';
-import Statistics from './Statistics';
-import FeedbackOptions from "./FeedbackOptions";
-import Section from './Section';
-import Notification from './Notification';
+import { ContactForm } from './ContactForm';
+import { Filter } from './Filter';
+import { ContactList } from './ContactList';
+import { InputFormBox, Phonebook} from './ContactForm.styled';
+import { ContactListBox } from './ContactList.styled';
+import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 
 export class App extends Component {
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0
-  };
-  countTotalFeedback = () => {
-    // return (this.state.good + this.state.neutral + this.state.bad); // Хардкор
-    return Object.values(this.state).reduce((total, el) => total + el, 0); // для любого кол-ва
+    contacts: [
+      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'}
+    ],
+    filter: ''
   }
-  countPositiveFeedbackPercentage = () => (Math.round(this.state.good / this.countTotalFeedback() * 100));
-
-  onFeedbackHandle = (evt) => {
-    const stateName = evt.currentTarget.name;
-    this.setState(prev => ({ [stateName]: prev[stateName] + 1 }));
+  submitHandle = (data) => {
+    // evt.preventDefault();
+    // if (!data.name || !data.number) return; // проверка на ввод всех полей
+    
+    // Проверка на дубликат имени в книге
+    const equalName = this.state.contacts.find(el => (el.name.toLowerCase() === data.name.toLowerCase()));
+    if (equalName) return alert(equalName.name + " is already in contacts");
+    
+    data.id = nanoid();
+    this.setState(prev => ({ contacts: [data, ...prev.contacts] }))
   }
-  btns = () => Object.keys(this.state);
-  
+  filterChange = (evt) => {
+    evt.preventDefault();
+    this.setState({ filter: evt.currentTarget.value });
+  }
+  onDelete = (id) => {
+    this.setState(prev => ({
+      contacts: prev.contacts.filter(
+      contact => contact.id !== id)
+    }))
+  }
   render() {
-    const {good, neutral, bad} = this.state
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    const filteredContacts = contacts.filter(contact => (contact.name.toLowerCase().includes(normalizedFilter)));
+
     return (
-      <div>
-        <Section title="Please leave feedback">
-          <FeedbackOptions options={this.btns()} onLeaveFeedback={this.onFeedbackHandle}/>
-        </Section>
-        
-        <Section title="Statistics">
-          {this.countTotalFeedback() ?
-            <Statistics good={good}
-              neutral={neutral}
-              bad={bad}
-              total={this.countTotalFeedback}
-              positivePercentage={this.countPositiveFeedbackPercentage} /> :
-              <Notification message="There is no feedback"/> }
-        </Section>
-      </div>
+      <Phonebook>
+        <InputFormBox>
+          <h1>Phonebook</h1>
+          <ContactForm submitHandle={this.submitHandle}/>
+        </InputFormBox>
+        <ContactListBox>
+          <h2>Contact List</h2>
+          <Filter filter={filter} filterChange={this.filterChange}/>
+          {contacts.length ?
+            <ContactList contacts={filteredContacts} onDelete={this.onDelete} /> :
+            <p>No any contacts</p>}
+        </ContactListBox>
+      </Phonebook>
     );
-  }
-};
-FeedbackOptions.propTypes = {
-  options: PropTypes.array,
-  onLeaveFeedback: PropTypes.func
+  };
 }
-Section.propType = {
-  title: PropTypes.string,
-  children: PropTypes.node
+ContactForm.propTypes = {
+  submitHandle: PropTypes.func
 }
-Statistics.propTypes = {
-  good: PropTypes.string,
-  neutral: PropTypes.string,
-  bad: PropTypes.string,
-  total: PropTypes.func,
-  positivePercentage: PropTypes.func
+Filter.propTypes = {
+  filter: PropTypes.string,
+  filterChange: PropTypes.func
 }
-Notification.propTypes = {
-  message: PropTypes.string
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
+  onDelete: PropTypes.func
 }
 
 
-// import Counter from 'components/Counter/Counter';
-// export default function App() {
-//   return (
-//     <Counter />
-//   );
-// }
 
+// import {Component} from 'react';
+
+// import ContactForm from "./ContactForm";
+// import ContactList from './ContactList';
+
+
+// export class App extends Component {
+//   state = {
+//     contacts: [  ],
+//     filter: '',
+//     inputValue: '',
+//     phone:'',
+//   }
+
+//   deleteContact = contactId => {
+//     this.setState(prevState => ({
+//       contacts: prevState.contacts.filter(contact => contact.id !== contactId)
+//     }))
+//   };
+
+//   handleInputChange = e => {
+//     const{name, value} = e.currentTarget
+//     this.setState({[name]:value})
+//   }
+
+//   handleSubmit = e => {
+//     e.preventDefault();
+//     console.log(this.state)
+//   }
+//   render() {
+//     const { contacts } = this.state
+//     console.log(this.state.inputValue)
+//     return (
+//       <div>
+//   <h1>Phonebook</h1>
+//   <ContactForm  />
+        
+//   <h2>Contacts</h2>
+//   <Filter />
+//         <ContactList contacts={contacts} onDeleteContact={ this.deleteContact}/>
+// </div>
+//     )
+//   }
+// };
 
 
 
