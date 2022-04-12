@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Field } from "formik";
 
-export const InputFormBox = styled.div`
+export const FormBox = styled.div`
   padding: 10px;
   margin: 10px;
   width: 320px;

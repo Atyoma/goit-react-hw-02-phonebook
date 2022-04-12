@@ -17,17 +17,17 @@ export const ListItem = styled.li`
   background-color: white;
   border-radius: 2px;
 `;
-export const NumByOrder = styled.span`
+export const NumberOrder = styled.span`
   margin-right: 10px;
   padding: 0 5px;
   width: 10px;
   border-radius: 5px;
 `;
-export const TelNum = styled.span`
+export const Number = styled.span`
   margin-left: 5px;
   font-weight: 700;
 `;
-export const DelBtn = styled.button`
+export const DeleteContact = styled.button`
   margin-left: auto;
   margin-right: 2px;
   padding: 5px;

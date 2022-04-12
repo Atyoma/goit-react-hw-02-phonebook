@@ -1,16 +1,22 @@
-import { ContactItem } from "./ContactItem";
+import {
+  ListItem,
+  NumberOrder,
+  Number,
+  DeleteContact,
+} from "./ContactList.styled";
 
-export function ContactList({ contacts, onDelete }) {
+export const ContactList = ({ contacts, method }) => {
   return (
     <>
-      {contacts.map((contact, idx) => (
-        <ContactItem
-          key={contact.id}
-          contact={contact}
-          idx={idx}
-          method={onDelete}
-        />
+      {contacts.map((contact, index) => (
+        <ListItem>
+          <NumberOrder>{index + 1}</NumberOrder>
+          {contact.name}: <Number>{contact.number}</Number>
+          <DeleteContact type="button" onClick={() => method(contact.id)}>
+            Delete
+          </DeleteContact>
+        </ListItem>
       ))}
     </>
   );
-}
+};

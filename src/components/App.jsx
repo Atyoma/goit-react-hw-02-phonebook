@@ -2,7 +2,7 @@ import {Component} from 'react';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
-import { InputFormBox, Phonebook} from './ContactForm.styled';
+import { FormBox, Phonebook} from './ContactForm.styled';
 import { ContactListBox } from './ContactList.styled';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
@@ -17,27 +17,25 @@ export class App extends Component {
     ],
     filter: ''
   }
-  submitHandle = (data) => {
-    // evt.preventDefault();
-    // if (!data.name || !data.number) return; // проверка на ввод всех полей
-    
-    // Проверка на дубликат имени в книге
-    const equalName = this.state.contacts.find(el => (el.name.toLowerCase() === data.name.toLowerCase()));
-    if (equalName) return alert(equalName.name + " is already in contacts");
+
+  onDelete = (id) => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(
+      contact => contact.id !== id)
+    }))
+  }
+    matchСheck = (data) => {
+    const currentName = this.state.contacts.find(el => (el.name.toLowerCase() === data.name.toLowerCase()));
+    if (currentName) return alert(currentName.name + " is already in contacts");
     
     data.id = nanoid();
     this.setState(prev => ({ contacts: [data, ...prev.contacts] }))
   }
-  filterChange = (evt) => {
-    evt.preventDefault();
-    this.setState({ filter: evt.currentTarget.value });
+  filterChange = (e) => {
+    e.preventDefault();
+    this.setState({ filter: e.currentTarget.value });
   }
-  onDelete = (id) => {
-    this.setState(prev => ({
-      contacts: prev.contacts.filter(
-      contact => contact.id !== id)
-    }))
-  }
+
   render() {
     const { filter, contacts } = this.state;
     const normalizedFilter = filter.toLowerCase();
@@ -45,10 +43,10 @@ export class App extends Component {
 
     return (
       <Phonebook>
-        <InputFormBox>
+        <FormBox>
           <h1>Phonebook</h1>
           <ContactForm submitHandle={this.submitHandle}/>
-        </InputFormBox>
+        </FormBox>
         <ContactListBox>
           <h2>Contact List</h2>
           <Filter filter={filter} filterChange={this.filterChange}/>
@@ -67,6 +65,7 @@ Filter.propTypes = {
   filter: PropTypes.string,
   filterChange: PropTypes.func
 }
+
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.object),
   onDelete: PropTypes.func
@@ -74,50 +73,6 @@ ContactList.propTypes = {
 
 
 
-// import {Component} from 'react';
-
-// import ContactForm from "./ContactForm";
-// import ContactList from './ContactList';
-
-
-// export class App extends Component {
-//   state = {
-//     contacts: [  ],
-//     filter: '',
-//     inputValue: '',
-//     phone:'',
-//   }
-
-//   deleteContact = contactId => {
-//     this.setState(prevState => ({
-//       contacts: prevState.contacts.filter(contact => contact.id !== contactId)
-//     }))
-//   };
-
-//   handleInputChange = e => {
-//     const{name, value} = e.currentTarget
-//     this.setState({[name]:value})
-//   }
-
-//   handleSubmit = e => {
-//     e.preventDefault();
-//     console.log(this.state)
-//   }
-//   render() {
-//     const { contacts } = this.state
-//     console.log(this.state.inputValue)
-//     return (
-//       <div>
-//   <h1>Phonebook</h1>
-//   <ContactForm  />
-        
-//   <h2>Contacts</h2>
-//   <Filter />
-//         <ContactList contacts={contacts} onDeleteContact={ this.deleteContact}/>
-// </div>
-//     )
-//   }
-// };
 
 
 
