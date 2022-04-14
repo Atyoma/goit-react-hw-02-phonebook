@@ -45,7 +45,7 @@ export class App extends Component {
       <Phonebook>
         <FormBox>
           <h1>Phonebook</h1>
-          <ContactForm submitHandle={this.submitHandle}/>
+          <ContactForm submitHandle={this.matchСheck}/>
         </FormBox>
         <ContactListBox>
           <h2>Contact List</h2>
@@ -61,15 +61,9 @@ export class App extends Component {
 ContactForm.propTypes = {
   submitHandle: PropTypes.func
 }
-Filter.propTypes = {
-  filter: PropTypes.string,
-  filterChange: PropTypes.func
-}
 
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object),
-  onDelete: PropTypes.func
-}
+
+
 
 
 

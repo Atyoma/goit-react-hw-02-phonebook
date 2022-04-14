@@ -5,18 +5,25 @@ import {
   DeleteContact,
 } from "./ContactList.styled";
 
-export const ContactList = ({ contacts, method }) => {
+import PropTypes from "prop-types";
+
+export const ContactList = ({ contacts, onDelete }) => {
   return (
     <>
       {contacts.map((contact, index) => (
-        <ListItem>
+        <ListItem key={index}>
           <NumberOrder>{index + 1}</NumberOrder>
           {contact.name}: <Number>{contact.number}</Number>
-          <DeleteContact type="button" onClick={() => method(contact.id)}>
+          <DeleteContact type="button" onClick={() => onDelete(contact.id)}>
             Delete
           </DeleteContact>
         </ListItem>
       ))}
     </>
   );
+};
+
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
+  onDelete: PropTypes.func,
 };

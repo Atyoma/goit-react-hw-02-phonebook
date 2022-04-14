@@ -8,7 +8,7 @@ export class ContactForm extends Component {
     number: "",
   };
   onSubmit = (values, action) => {
-    this.props.matchСheck(values);
+    this.props.submitHandle(values);
     action.resetForm();
   };
   render() {
