@@ -17,7 +17,19 @@ export class App extends Component {
     ],
     filter: ''
   }
+  componentDidMount() {
+    const contacts = localStorage.getItem("Contacts");
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("Contacts", JSON.stringify(this.state.contacts));
+    }
+  }
   onDelete = (id) => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(
@@ -44,7 +56,7 @@ export class App extends Component {
     return (
       <Phonebook>
         <FormBox>
-          <h1>Phonebook</h1>
+          <h1>Phonebook333</h1>
           <ContactForm submitHandle={this.matchСheck}/>
         </FormBox>
         <ContactListBox>
